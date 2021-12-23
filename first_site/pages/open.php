@@ -11,23 +11,26 @@ if (isset($_POST['open_button'])) {
         $file = fopen("data.txt", "a+");
         while ($string = fgets($file)) {
             $number = explode(":", $string);
-            if ($number[0] === $_POST["login"]){
-            if ($number[1] === $_POST["password"]) {
-                $_SESSION['login'] = $number[0];
-                $_SESSION['pass'] = $number[1];
-                echo '"index.php?page=1"';
-            }
-            else{
-                $passError = "Неверный пароль";
-                $loginreg = '<button class="btn btn-primary">
+            if ($number[0] === $_POST["login"]) {
+                if ($number[1] === $_POST["password"]) {
+                    $_SESSION['login'] = $number[0];
+                    $_SESSION['pass'] = $number[1];
+                    echo '"index.php?page=1"';
+
+                } else {
+                    $passError = "Неверный пароль";
+                    $loginreg = '<button class="btn btn-primary">
 <a href="index.php?page=4" class="text-light">Зарегистрироваться</a></button>';
+                    break;
+                }
             }
-        }
-        }
-            $logErr = "Такой логин уже существует";
+          /*  $logErr = "Такой логин уже существует";
             $loginreg = '<button class="btn btn-primary">
 <a href="index.php?page=4" class="text-light">Зарегистрироваться</a></button>';
+            break;*/
         }
+
+    }
 
 }
 ?>

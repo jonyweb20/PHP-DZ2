@@ -16,23 +16,21 @@ if (isset($_POST['reg_button'])) {
             if ($_POST["password"] !== $_POST["confirm"]) {
                 $confirmErr = "Пароль не совпадает";
             } elseif (logins($_POST["login"])) {
-
                 $file = fopen("data.txt", "a+");
                 while ($string = fgets($file)) {
+                   echo "<pre>";
+                   var_dump($string);
+                   echo "<pre>";
+                    $SS = explode(":", $string);
                     echo $_SESSION['login'];
-                    echo "<pre>";
-                    var_dump($string);
-                    echo "<pre>";
-                    $splitstring = explode(":", $string);
-                    echo "<pre>";
-                    var_dump($splitstring);
-                    echo "<pre>";
-                    if ($splitstring[0] != $_POST["login"] && passwords($_POST["password"])) {
+                    if ($SS[0] != $_POST["login"] && passwords($_POST["password"])) {
                         $dataString = $_POST["login"] . ":" . $_POST["password"] . "::" . "\n";
                         fputs($file, $dataString);
                         echo '"index.php?page=1"';
-                    } else  $loginErr = "Такой пользователь уже существует";
+                        break;
+                    }
                 }
+                $loginErr = "Такой пользователь уже существует";
             } else {
                 !logins($_POST["login"]) ? $loginErr : $passwordErr;
             }
