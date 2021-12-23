@@ -11,33 +11,35 @@ if (isset($_POST['reg_button'])) {
         } else {
             $confirmErr = "Заполните пароль";
         }
-    } elseif (isset($_POST["login"]) && isset($_POST["password"]) && isset($_POST["confirm"])) {
-        if ($_POST["password"] !== $_POST["confirm"]) {
-            $confirmErr = "Пароль не совпадает";
-        } else {
-            if (logins($_POST["login"]) && passwords($_POST["password"])) {
+    } else
+        if (isset($_POST["login"]) && isset($_POST["password"]) && isset($_POST["confirm"])) {
+            if ($_POST["password"] !== $_POST["confirm"]) {
+                $confirmErr = "Пароль не совпадает";
+            } elseif (logins($_POST["login"])) {
+
                 $file = fopen("data.txt", "a+");
                 while ($string = fgets($file)) {
-                    $dataLogin = substr($string, 0, strpos($string, ":"));
-                    if ($dataLogin === $_POST["login"]) {
-                        $loginErr = "Такой пользователь уже существует";
-                    } else
+                    echo $_SESSION['login'];
+                    echo "<pre>";
+                    var_dump($string);
+                    echo "<pre>";
+                    $splitstring = explode(":", $string);
+                    echo "<pre>";
+                    var_dump($splitstring);
+                    echo "<pre>";
+                    if ($splitstring[0] != $_POST["login"] && passwords($_POST["password"])) {
                         $dataString = $_POST["login"] . ":" . $_POST["password"] . "::" . "\n";
-                    fputs($file, $dataString);
-                    echo '"index.php?page=1"';
+                        fputs($file, $dataString);
+                        echo '"index.php?page=1"';
+                    } else  $loginErr = "Такой пользователь уже существует";
                 }
+            } else {
+                !logins($_POST["login"]) ? $loginErr : $passwordErr;
             }
-            else{
-                if (!logins($_POST["login"])){
-                    $loginErr;
-                }
-                else
-                    $passwordErr;
-            }
-
+        }
+        else {echo $loginErr = "левая ошибка";
         }
 
-    }
 }
 ?>
 >
@@ -85,10 +87,5 @@ if (!isset($_SESSION['login'])) {
         <button name="reg_button" class="btn btn-primary" type="submit">Зарегистрироваться</button>
     </div>
 </form>
-<?php
-echo "<h2>Вы ввели:</h2>";
-echo $login;
-echo "";
-echo "<br>";
-?>
+
 
