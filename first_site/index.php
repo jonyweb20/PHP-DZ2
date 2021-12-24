@@ -1,6 +1,32 @@
 <?php
 session_start();
 include ('functions.php');
+function exits(){
+    if ($_POST['btn-exit'] && !isset($_SESSION['login'])){
+        echo "index.php?page=5";
+    }
+    elseif ($_POST['btn-exit'] && isset($_SESSION['login'])) {
+        echo "index.php?page=1";
+        session_destroy();
+    }
+}
+function user(){
+if (!isset($_SESSION['login'])) {
+   echo 'ВОЙТИ';
+    }
+ else {
+    echo 'ВЫЙТИ';
+    }
+}
+
+function viewUser(){
+    if ($_SESSION['login']){
+        echo "Привет, " . $_SESSION['login'];
+    }
+    else
+    echo "Привет, Гость ";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,28 +45,16 @@ include ('functions.php');
             <div class="d-flex justify-content-between">
                 <h1>SITE ON PHP</h1>
                 <div>
-                        <div>
+                        <div class="d-flex justify-content-between">
                         <img src="img/user.png" alt="img-user">
-                            <button class="btn bg-success bg-opacity-50"
-                                <?php
-                                if(!isset($_SESSION['login']))
-                                {
-                                    echo "><a href=index.php?page=5>ВОЙТИ</a>";
-                                }
-                                else{
-                                 session_destroy();
-                                    echo "><a href=index.php?page=1>ВЫЙТИ</a>";
-                                }
-                                ?>
-                            </button>
+                            <form action=" <?exits();?>" method="post">
+                            <input type="submit" class="btn bg-success bg-opacity-50" name="btn-exit" value="<?user()?>">
+                            </form>
+
+
                         </div>
                         <div class="user">
-                        <?php
-                            if(isset($_SESSION['login']))
-                            {
-                                echo "Привет,". $_SESSION['login'];
-                            }
-                        ?>
+                       <? viewUser() ?>
                         </div>
                 </div>
             </div>
@@ -100,22 +114,8 @@ include ('functions.php');
                 }
             ?>
         </section>
-        <footer class="row">
-            <?php
-            $file = 'monkey.gif';
-
-            if (file_exists($file)) {
-                header('Content-Description: File Transfer');
-                header('Content-Type: application/octet-stream');
-                header('Content-Disposition: attachment; filename="'.basename($file).'"');
-                header('Expires: 0');
-                header('Cache-Control: must-revalidate');
-                header('Pragma: public');
-                header('Content-Length: ' . filesize($file));
-                readfile($file);
-                exit;
-            }
-            ?>
+        <footer class="row d-flex fixed-bottom">
+            <div class="d-flex justify-content-center border bg-light bg-opacity-90">Все права защищены</div>
         </footer>
     </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
